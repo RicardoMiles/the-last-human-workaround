@@ -22,13 +22,14 @@ Each case aims to show:
 4. A product hypothesis: who benefits, what should change, and what trade-offs matter.
 5. The upstream conversation and a separate local verification result.
 
-## Field notes
+## Field notes and upstream progress
 
-| Case                                                           | Tool              | Related issue                                                                   | What it demonstrates                                                                  | Upstream status*                                       |
-| -------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| Codex: missing middle turns after reopening a chat             | Codex Desktop     | [openai/codex#42025](https://github.com/openai/codex/issues/42025)               | An independent reproduction with intact rollout data but incomplete projected history | Open                                                   |
-| OpenCode: session history lost after a provider stream failure | OpenCode Desktop  | [anomalyco/opencode#46402](https://github.com/anomalyco/opencode/issues/46402)   | Incident forensics, evidence boundaries, and a data-loss prevention proposal          | Open                                                   |
-| CC Switch: per-model built-in tool controls for Codex          | CC Switch / Codex | [farion1231/cc-switch#7736](https://github.com/farion1231/cc-switch/issues/7736) | Workaround trade-offs and a product-level capability design                           | Open                                                   |
-| Kiro Crew: Older Sessions investigation                        | Kiro Crew         | [kirodotdev/KiroCrew#10857](https://github.com/kirodotdev/KiroCrew/issues/10857) | A corrected hypothesis and a concrete plan for collecting missing evidence            | Closed as not planned; maintainers could not reproduce |
+| Case | Tool | Related issue | What it demonstrates | Current handling |
+| --- | --- | --- | --- | --- |
+| Codex: missing middle turns after reopening a chat | Codex Desktop | [openai/codex#42025](https://github.com/openai/codex/issues/42025) | An independent reproduction with intact rollout data but incomplete projected history | Open; no PR linked on the issue |
+| OpenCode: session history lost after a provider stream failure | OpenCode Desktop | [anomalyco/opencode#46402](https://github.com/anomalyco/opencode/issues/46402) | Incident forensics, evidence boundaries, and a data-loss prevention proposal | Open; assigned; no PR linked on the issue |
+| [OpenCode: resume sessions by title from the shell](cases/opencode-shell-session-resume.md) | OpenCode CLI | [Selector #48718](https://github.com/anomalyco/opencode/issues/48718), [title lookup #12404](https://github.com/anomalyco/opencode/issues/12404) | A shell workaround, a CLI comparison, and the matching upstream proposal | Selector issue open; [V1 PR #48719](https://github.com/anomalyco/opencode/pull/48719) and [V2 PR #50052](https://github.com/anomalyco/opencode/pull/50052) open. Title lookup issue closed as duplicate; no native title resume in OpenCode 1.18.34 |
+| CC Switch: per-model built-in tool controls for Codex | CC Switch / Codex | [farion1231/cc-switch#7736](https://github.com/farion1231/cc-switch/issues/7736) | Workaround trade-offs and a product-level capability design | Open; no PR linked on the issue |
+| Kiro Crew: Older Sessions investigation | Kiro Crew | [kirodotdev/KiroCrew#10857](https://github.com/kirodotdev/KiroCrew/issues/10857) | A corrected hypothesis and a concrete plan for collecting missing evidence | Closed as not planned; no PR linked on the issue |
 
-\*Snapshot on 2026-10-05. A closed issue is **not** proof that a fix shipped.
+Status checked on 2026-10-05. These are upstream issue and PR states, not confirmation that a fix has shipped or passed a local recheck.
