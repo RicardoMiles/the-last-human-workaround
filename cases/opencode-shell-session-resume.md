@@ -1,6 +1,6 @@
 # OpenCode: resuming sessions by title from the shell
 
-I spent an afternoon trying to resume OpenCode sessions by title from the shell. I built a `opencode session list → jq → fzf → oepncode -s <sessionID>` pipeline, then found that [#48718](https://github.com/anomalyco/opencode/issues/48718) had proposed essentially the same solution. This note records the friction I encountered, how I arrived at the workaround, and what I felt inconsistently low-efficiency the resume flows gap from Codex and Claude Code.
+I spent an afternoon trying to resume OpenCode sessions by title from the shell. I built a `opencode session list → jq → fzf → opencode -s <sessionID>` pipeline, then found that [#48718](https://github.com/anomalyco/opencode/issues/48718) had proposed essentially the same solution. This note records the friction I encountered, how I arrived at the workaround, and what I felt inconsistently low-efficiency the resume flows gap from Codex and Claude Code.
 
 ## The friction
 
