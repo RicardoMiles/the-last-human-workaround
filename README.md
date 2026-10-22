@@ -4,11 +4,11 @@ Grow with agents before I fade, grow with agents at dusk. While AI grows...
 
 Notes on their rough edges, the workarounds that help, and what we learn along the way.
 
-Real user friction -> Reproducible evidence -> Pratical workarounds -> Better Product Decisions.
+Real user friction -> Reproducible evidence -> Practical workarounds -> Better Product Decisions.
 
 I am an IT Engineer working on digital and AI transformation. My work spans employee support workflow automation, software delivery, DevOps, and the responsible adoption of AI tools. AI Agent product is heavily used in my daily life and real workflow. The repository is my public record of my personal exploration. Investigating the gaps I encounter, sharing useful findings upstream, sharing workarounds for my peers are the main work here.
 
-It is an independent portforlio, not an official support channel for any product.
+It is an independent portfolio, not an official support channel for any product.
 
 ## Scope
 
@@ -26,6 +26,7 @@ Each case aims to show:
 
 | Case | Tool | Related issue | What it demonstrates | Current handling |
 | --- | --- | --- | --- | --- |
+| [Kiro on Big Sur Holdout](cases/kiro-bigsur-missing-symbols.md) | Kiro CLI / Kiro Crew | Kiro [#6902](https://github.com/kirodotdev/Kiro/issues/6902), [#7835](https://github.com/kirodotdev/Kiro/issues/7835), [#12062](https://github.com/kirodotdev/Kiro/issues/12062); Crew [PR #21723](https://github.com/kirodotdev/KiroCrew/pull/21723); Bun [#6035](https://github.com/oven-sh/bun/issues/6035), [#2154](https://github.com/oven-sh/bun/issues/2154), [PR #43643](https://github.com/oven-sh/bun/pull/43643) | CLI and embedding shims, plus guards for keeping a working CLI/Crew pair | Local workaround in use; CLI compatibility issue filed; loader evidence and Crew PR test results posted |
 | [KiroCrew: dormant & old sessions mechanism design](cases/kirocrew-session-lifecycle.md) | Kiro Crew | [kirodotdev/KiroCrew#18235](https://github.com/kirodotdev/KiroCrew/issues/18235) | Deep-user feedback on project organization, Dormant collapsing, and session lifecycle | Open; no comments, assignee, or linked PR |
 | [KiroCrew: ACP sends an unavailable Auto model on Windows](cases/kiro-auto-jev-model-failure.md) | Kiro Crew | [kirodotdev/KiroCrew#17519](https://github.com/kirodotdev/KiroCrew/issues/17519) | A version-specific ACP startup failure with account model-catalogue evidence and a fallback-path hypothesis | Completed; closed via [PR #19560](https://github.com/kirodotdev/KiroCrew/pull/19560) on 2026-10-13 |
 | Codex: remote session cannot be moved between SSH projects | Codex Desktop | [openai/codex#51394](https://github.com/openai/codex/issues/51394) | A reproducible cross-project session-management failure with a clear fallback expectation | Open; no comments, assignee, or linked PR |
@@ -35,4 +36,4 @@ Each case aims to show:
 | CC Switch: per-model built-in tool controls for Codex | CC Switch / Codex | [farion1231/cc-switch#7736](https://github.com/farion1231/cc-switch/issues/7736) | Workaround trade-offs and a product-level capability design | Open; no PR linked on the issue |
 | [KiroCrew: old sessions bug](cases/kirocrew-session-lifecycle.md) | Kiro Crew | [kirodotdev/KiroCrew#10857](https://github.com/kirodotdev/KiroCrew/issues/10857) | A corrected hypothesis and a concrete plan for collecting missing evidence | Closed as not reproducible; [missing version context and recheck supplied](https://github.com/kirodotdev/KiroCrew/issues/10857#issuecomment-6069044796) on 2026-10-08. Original overlap observed on v0.3.0; no longer reproduced in the author's v0.7.2 test |
 
-Status checked on 2026-10-13. These are upstream issue and PR states, not confirmation that a fix has shipped or passed a local recheck. In particular, KiroCrew #17519 is marked completed upstream, while OpenCode #46402 was closed pending a 2.0 recheck.
+The Big Sur row reflects the case record updated on 2026-10-22. Other rows were checked on 2026-10-13. Each case records its local test results separately from upstream progress.
