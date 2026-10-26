@@ -52,7 +52,7 @@ Verify normal startup yourself, then choose whether to lock the known working se
 python3 kiro_maintenance.py lock --acknowledge-file-flags
 ```
 
-Locking is optional. Unlock before updating. A locked package can make an updater fail partway through its work. The tool never locks the whole fix root, backup folder or gateway log folder.
+Locking is optional. Unlock before updating. A locked package can make an updater fail partway through its work. The tool never locks the whole fix root, backup folder or gateway log folder. For Kiro Crew, `kiro_crew/deploy/skills/` is intentionally left mutable: gateway startup copies those resources into the managed skills directory and writes a marker file. The unlock command still clears stale flags in that subtree.
 
 ## What the guards cover
 

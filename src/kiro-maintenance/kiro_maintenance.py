@@ -1046,7 +1046,12 @@ def lock_targets(config: Config) -> Tuple[List[Tuple[str, Path, bool]], List[str
     return unique, errors
 
 
-def physical_tree(label: str, root: Path) -> Tuple[List[Tuple[str, Path, os.stat_result]], List[Path]]:
+def physical_tree(
+    label: str,
+    root: Path,
+    *,
+    exclude_deploy_skills: bool = False,
+) -> Tuple[List[Tuple[str, Path, os.stat_result]], List[Path]]:
     found = []
     skipped = []
     pending = [(label, root)]
@@ -1061,6 +1066,16 @@ def physical_tree(label: str, root: Path) -> Tuple[List[Tuple[str, Path, os.stat
             continue
         if not stat.S_ISREG(stats.st_mode) and not stat.S_ISDIR(stats.st_mode):
             raise MaintenanceError("unsupported special file in {}: {}".format(label, path))
+        if (
+            exclude_deploy_skills
+            and item_label == "Crew package"
+            and path.parts[-2:] == ("deploy", "skills")
+        ):
+            # Kiro Crew copies these resources into ~/.kiro/crew/skills at
+            # gateway startup and writes its managed marker there. Keep the
+            # source subtree mutable so its uchg flags are not propagated to
+            # the runtime copy. Unlock still walks this subtree normally.
+            continue
         found.append((item_label, path, stats))
         if stat.S_ISDIR(stats.st_mode):
             try:
@@ -1104,7 +1119,11 @@ def change_lock_state(config: Config, lock: bool, acknowledged: bool) -> int:
             symlink = has_symlink_component(path)
             if symlink:
                 raise MaintenanceError("symlink component is not followed: {}".format(symlink))
-            entries, ignored = physical_tree(label, path) if recursive else (
+            entries, ignored = physical_tree(
+                label,
+                path,
+                exclude_deploy_skills=lock,
+            ) if recursive else (
                 [(label, path, lstat_path(path))], []
             )
             skipped.extend(ignored)
