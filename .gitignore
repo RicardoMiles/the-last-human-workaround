@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+
+# Local bridge inputs and runtime output are not publication artifacts.
+src/opencode/v1-cli-bridge/*.zip
+src/opencode/v1-cli-bridge/*.dmg
+src/opencode/v1-cli-bridge/*.log
+src/opencode/v1-cli-bridge/*.plist
+src/opencode/v1-cli-bridge/connection.secret
+src/opencode/v1-cli-bridge/server-password
+src/opencode/v1-cli-bridge/manifest.json
+src/opencode/v1-cli-bridge/.local/
+src/opencode/v1-cli-bridge/.downloads/
