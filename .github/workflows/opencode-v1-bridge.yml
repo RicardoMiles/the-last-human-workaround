@@ -23,7 +23,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          # Keep the minimum-version job on an image with Python 3.9 builds;
+          # ubuntu-latest is Ubuntu 26.04 and no longer provides that runtime.
+          - os: ubuntu-22.04
             python: '3.9'
           - os: ubuntu-latest
             python: '3.13'
