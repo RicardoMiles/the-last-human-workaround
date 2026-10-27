@@ -1,5 +1,6 @@
 import email.message
 import hashlib
+import io
 import json
 import os
 import plistlib
@@ -215,7 +216,7 @@ class BridgeAdversarialTests(unittest.TestCase):
                     no_redirect = any(isinstance(h, bridge._NoRedirect) for h in self.handlers)
                     if no_redirect:
                         raise urllib.error.HTTPError(
-                            request.full_url, 302, "redirect blocked", email.message.Message(), None
+                            request.full_url, 302, "redirect blocked", email.message.Message(), io.BytesIO()
                         )
                     redirected = urllib.request.HTTPRedirectHandler().redirect_request(
                         request, None, 302, "Found", email.message.Message(), "https://external.invalid/"
@@ -229,7 +230,7 @@ class BridgeAdversarialTests(unittest.TestCase):
             return opener
 
         with mock.patch.object(urllib.request, "build_opener", side_effect=fake_build_opener):
-            with self.assertRaises(bridge.BridgeError):
+            with self.assertRaisesRegex(bridge.BridgeError, "HTTPError"):
                 b.health()
         self.assertEqual(len(made), 1)
         self.assertEqual(len(made[0].calls), 1)

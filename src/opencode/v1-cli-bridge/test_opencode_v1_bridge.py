@@ -266,12 +266,11 @@ class BridgeTests(unittest.TestCase):
 
         def redirecting(request, **_kwargs):
             requests.append(request)
-            error = urllib.error.HTTPError(request.full_url, 302, "redirect", {"Location": "https://example.invalid/"}, None)
-            error.close()
+            error = urllib.error.HTTPError(request.full_url, 302, "redirect", {"Location": "https://example.invalid/"}, io.BytesIO())
             raise error
 
         self.bridge.health_opener = redirecting
-        with self.assertRaisesRegex(bridge.BridgeError, "health check failed"):
+        with self.assertRaisesRegex(bridge.BridgeError, "HTTPError"):
             self.bridge.health()
         self.assertEqual(len(requests), 1)
         self.assertIn("/global/health", requests[0].full_url)

@@ -7,6 +7,7 @@ installs it and manages a per-user LaunchAgent.
 from __future__ import annotations
 import argparse
 import base64
+import contextlib
 import hashlib
 import json
 import os
@@ -641,7 +642,10 @@ class Bridge:
                 body = response.read(1024 * 1024)
         except Exception as exc:
             if isinstance(exc, urllib.error.HTTPError):
-                exc.close()
+                # Cleanup must not replace the original transport failure;
+                # older urllib versions can also fail while closing an error.
+                with contextlib.suppress(Exception):
+                    exc.close()
             # Never echo a transport exception: an injected opener or upstream
             # library could include the request's Authorization header in it.
             raise BridgeError("health check failed (" + type(exc).__name__ +
