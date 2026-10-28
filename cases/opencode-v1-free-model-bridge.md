@@ -11,11 +11,11 @@ The updater had already reported 1.19.4 as the latest desktop version. On an arm
 
 I am quite happy with OpenCode TUI for months. The GUI installed on two of my macbooks have never been opened since the session db lost happened in June. I didn't realise that until my friend @sakanation found that OpenCode's desktop error message. The inconsistency of experience on GUI and TUI tickled me.
 
-As OpenCode officially shifted the focus to V2, I might just log this workaround for users that heavily reliant on V1. (One of my device holds a lot V1 sessions. V1 sessions will be defaultly dropped [Maintainer Reply](https://github.com/anomalyco/opencode/issues/49827#issuecomment-6359007338))
+As OpenCode officially shifted the focus to V2, I might just log this workaround for users that heavily reliant on V1. One of my devices holds a lot of V1 sessions. There is separate migration issue: V1 sessions created in non-git directories could become hidden from V2's per-folder session lists while remaining stored under `global` ([upstream explanation](https://github.com/anomalyco/opencode/issues/49827#issuecomment-6359007338)). Due to the experience issues, I prefer stay with V1 for a while
 
 * [OpenCode#46402](https://github.com/anomalyco/opencode/issues/46402) the db lost I've bumped into on Desktop GUI V1
 * [Shift focus to V2](https://github.com/anomalyco/opencode/issues/46402#issuecomment-6112353559)
-* [OpenCode #49827](https://github.com/anomalyco/opencode/issues/49827) V2 dropped V1 sessions, still open till 2026-10-27
+* [OpenCode #49827](https://github.com/anomalyco/opencode/issues/49827) V1 non-git sessions hidden after V2 migration. [PR #56322](https://github.com/anomalyco/opencode/pull/56322) was merged for future imports; [PR #58846](https://github.com/anomalyco/opencode/pull/58846), which repairs already-migrated sessions, remained open as of 2026-10-28.
 
 ## Root Cause that TUI & GUI diverged
 
@@ -49,11 +49,21 @@ Its 29 isolated tests cover failed provenance checks, path and service ownership
 
 ## Upstream Info
 
-A repository member's main issue [#59387](https://github.com/anomalyco/opencode/issues/59387) confirms that V1 no longer supports free models and that the V1 updater stays on the 1.x line. The exact-error issue [#59378](https://github.com/anomalyco/opencode/issues/59378) was closed as a duplicate; the [member's closing comment](https://github.com/anomalyco/opencode/issues/59378#issuecomment-6449317914) directs users to v2. [#59003](https://github.com/anomalyco/opencode/issues/59003) reports the same 1.19.4 desktop failure with a successful CLI path and is also closed as a duplicate. The v2-versus-V1 compatibility report in [#58835](https://github.com/anomalyco/opencode/issues/58835) was closed as not planned. Its bot replies are not independent maintainer confirmation, and its discussion did not provide a supported V1 free-model fix.
+I checked the issue discussions and release PRs again on 2026-10-28. The same-version Desktop/CLI split has an independent report, and the update behavior has explicit release changes behind it.
 
-The download question remains open in [#59616](https://github.com/anomalyco/opencode/issues/59616). I did not find a PR or backport that restores free-model support to the V1 desktop client. Related merged changes, such as [#57146](https://github.com/anomalyco/opencode/pull/57146) and [#57466](https://github.com/anomalyco/opencode/pull/57466), address reset timing and quota-dialog behavior, not this V1 client policy.
+| Upstream item | Status |
+| --- | --- |
+| [OpenCode #59003](https://github.com/anomalyco/opencode/issues/59003) | Closed as a duplicate of #58835. The reporter used Desktop 1.19.4 and CLI 1.19.4 on Windows with the same account, credentials, and model: Desktop failed while CLI worked. Reinstalling and logging in again did not help. This independently matches the client split, but the original report did not document a successful GUI-to-CLI-server recovery. I [shared my macOS recovery and helper](https://github.com/anomalyco/opencode/issues/59003#issuecomment-6466016692) there. Windows support for my helper has not been implemented or tested. |
+| [OpenCode #59387](https://github.com/anomalyco/opencode/issues/59387) and [#59378](https://github.com/anomalyco/opencode/issues/59378) | A repository member's main issue says V1 no longer supports free models and its updater stays on 1.x. The exact-error report #59378 was closed as a duplicate; the [member's closing comment](https://github.com/anomalyco/opencode/issues/59378#issuecomment-6449317914) directs users to v2. This is the upstream migration position, not a V1 fix. |
+| [OpenCode PR #59529](https://github.com/anomalyco/opencode/pull/59529) | Merged on 2026-10-27. It restores missing desktop `app-update.yml` packaging in the new release pipeline and explicitly publishes v2 GitHub releases with `--latest=false`, keeping V1 as GitHub Latest. The packaging repair concerns the new pipeline; keeping V1 as Latest helps explain why an existing V1 installation can report itself current while v2 is available. Neither change restores V1 free-model access. |
+| [OpenCode PR #54904](https://github.com/anomalyco/opencode/pull/54904) | Merged into `v1` on 2026-10-16. V1 CLI update discovery uses the `opencode-ai` npm package and accepts newer versions only within the same major; v2 is distributed as `@opencode/cli`. Crossing to v2 requires an explicit major upgrade. This explains the CLI's update boundary; it does not replace the GUI's bundled sidecar. |
+| [OpenCode #58835](https://github.com/anomalyco/opencode/issues/58835) | Closed as not planned. It compares V1 Desktop failure with a working v2 CLI. Its bot replies are not independent maintainer confirmation. One user says Desktop worked again without giving steps or a version, so I cannot count it as a reproducible V1 fix. |
+| [OpenCode #59616](https://github.com/anomalyco/opencode/issues/59616) | Open at this check. It tracks the download path still leading users to V1; it does not supply a fix for free-model access. |
+| [OpenCode PR #57146](https://github.com/anomalyco/opencode/pull/57146) and [#57466](https://github.com/anomalyco/opencode/pull/57466) | Merged. They address free-limit error/reset information and desktop quota-dialog behavior. They do not restore free-model support to the V1 desktop client. |
 
-That evidence changed my goal. I was not trying to make the old desktop product pretend to be v2. My goal was just to keep the working V1 CLI as a local server and make the desktop app reuse TUI connection to API via documented external-server connection.
+Together, these records explain how “latest” on V1 and “upgrade to v2” can coexist. I did not find a merged PR or backport that restores V1 Desktop free-model support.
+
+That evidence changed my goal. My goal was just to keep the working V1 CLI as a local server and connect the existing GUI through its documented external-server flow.
 
 ## What I would change upstream
 
